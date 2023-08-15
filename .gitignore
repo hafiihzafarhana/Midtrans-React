@@ -1,0 +1,5 @@
+/node_server/node_modules
+/vite_client/node_modules
+/vite_client/dist
+/vite_client/.env
+/node_server/.env

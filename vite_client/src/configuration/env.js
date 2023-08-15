@@ -1,0 +1,9 @@
+const env = {
+  REACT_APP_BE_URL: import.meta.env.VITE_REACT_APP_BE_URL,
+  VITE_REACT_APP_MIDTRANS_CLIENT_KEY: import.meta.env
+    .VITE_REACT_APP_MIDTRANS_CLIENT_KEY,
+  VITE_REACT_APP_MIDTRANS_SERVER_KEY: import.meta.env
+    .VITE_REACT_APP_MIDTRANS_SERVER_KEY,
+};
+
+export default env;
