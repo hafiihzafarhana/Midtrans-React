@@ -1,11 +1,11 @@
 import { Box, Button, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-// import env from "../configuration/env";
+import env from "../configuration/env";
 import axios from "axios";
 
 function HomeView() {
   const [name, setName] = useState("");
-  const [orderId, setOrderId] = useState("");
+  const [order_id, setOrder_id] = useState("");
   const [total, setTotal] = useState(0);
 
   const [token, setToken] = useState("");
@@ -13,7 +13,7 @@ function HomeView() {
   const sendHandler = async () => {
     const data = {
       name,
-      orderId,
+      order_id,
       total,
     };
 
@@ -24,7 +24,7 @@ function HomeView() {
     };
 
     const response = await axios.post(
-      `http://localhost:5000/api/payments/process-transaction`,
+      `${env.REACT_APP_BE_URL}/payments/process-transaction`,
       data,
       config
     );
@@ -38,54 +38,30 @@ function HomeView() {
       console.log(token);
       window.snap.pay(token, {
         onSuccess: (result) => {
-          console.log("masuk 1");
-          alert("payment success!");
-          console.log(result);
           localStorage.setItem("pembayaran", JSON.stringify(result));
-          setToken("");
         },
         onPending: (result) => {
-          console.log("masuk 2");
-          alert("wating your payment!");
-          console.log(result);
           localStorage.setItem("pembayaran", JSON.stringify(result));
-          setToken("");
         },
         onError: (error) => {
-          console.log("masuk 3");
-          alert("payment failed!");
           console.log(error);
-          setToken("");
         },
         onClose: function () {
-          console.log("masuk 4");
-          /* You may add your own implementation here */
-          alert("you closed the popup without finishing the payment");
           setToken("");
         },
       });
-      console.log("masuk 5");
-      setName("");
-      setOrderId("");
-      setTotal(0);
-    } else {
-      console.log(2);
     }
   }, [token]);
 
   useEffect(() => {
-    console.log("masuk 6");
     const midtransUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
-    console.log("masuk 7");
     let scriptTag = document.createElement("script");
-    console.log("masuk 8");
     scriptTag.src = midtransUrl;
-    console.log("masuk 9");
-    const midtransClientKey = "Mid-client-sor1dlAlNlE2y4NO";
-    scriptTag.setAttribute("data-client-key", midtransClientKey);
-    console.log("masuk 10");
+    scriptTag.setAttribute(
+      "data-client-key",
+      env.VITE_REACT_APP_MIDTRANS_CLIENT_KEY
+    );
     document.body.appendChild(scriptTag);
-    console.log("masuk 11");
     return () => document.body.removeChild(scriptTag);
   }, []);
 
@@ -112,9 +88,9 @@ function HomeView() {
         label="Order ID"
         type="text"
         variant="outlined"
-        value={orderId}
+        value={order_id}
         sx={{ marginBottom: 2 }}
-        onChange={(e) => setOrderId(e.target.value)}
+        onChange={(e) => setOrder_id(e.target.value)}
       />
 
       <TextField
